@@ -2,7 +2,8 @@
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
 import { open } from "./http/open.js"
-import { rtd, sayname } from "./crud/who.js"
+import { sayname } from "./crud/who.js"
+import { config } from "./cmd/rtd.js"
 
 const argv = yargs(hideBin(process.argv))
 
@@ -19,12 +20,6 @@ argv.command('serve [port]', 'start the server', (yargs) => {
   if (argv.verbose) console.info(`start server on : ${argv.port}`)
   serve(argv.port)
 })
-  .option('verbose', {
-    alias: 'v',
-    type: 'boolean',
-    description: 'Run with verbose logging',
-    default: true,
-  })
   .command('open [url]', 'open the browser', (yargs) => {
     return yargs.positional('url', {
       describe: 'the web url',
@@ -38,25 +33,15 @@ argv.command('serve [port]', 'start the server', (yargs) => {
   }, () => {
     sayname()
   })
-  .command('rtd', 'get some you forgot', (yargs) => {
-    return
-  }, (argv) => {
-    if (argv.who && argv.path) {
-      return
-    } else if (argv.who) {
-      rtd('who', 'get', argv.who)
-    } else {
-      rtd()
-    }
-  })
-  .option('who', {
-    alias: 'w',
-    type: 'string',
-    description: 'the user name',
-  })
-  .option('path', {
-    alias: 'p',
-    type: 'string',
-    description: 'the path to the file',
-  })
+  .command('config [operate] [key] [value]', 'config info', (yargs) => {
+    return yargs.positional('operate', {
+      describe: 'the operate',
+      choices: ['get', 'set']
+    }).positional('key', {
+      describe: 'the key',
+    }).positional('value', {
+      describe: 'the value',
+    })
+  }, (argv) => config(argv))
+  .epilogue('CRf v1.0.0')
   .parse()

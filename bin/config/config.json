@@ -1,10 +1,5 @@
 {
-  "who": {
-    "name": "CRfilee",
-    "email": "zihao02325@gmail.com"
-  },
-  "path": {
-    "pwd": "unset",
-    "token": "unset"
-  }
+  "name": "CRfilee",
+  "email": "zihao02325@gmail.com",
+  "token": 123
 }
