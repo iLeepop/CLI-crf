@@ -1,5 +1,5 @@
-import { exec } from 'node:child_process'
+import open from 'open'
 
-export const open = (url) => {
-  exec(`open ${url}`)
+export const openj = async (url) => {
+  await open(url)
 }

@@ -1,15 +1,12 @@
 #!/usr/bin/env node
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
-import { open } from "./http/open.js"
+import { openj } from "./http/open.js"
 import { sayname } from "./crud/who.js"
-import { config } from "./cmd/rtd.js"
+import { config, rmb, wis } from "./cmd/rtd.js"
+import { serve } from "./cmd/serve.js"
 
 const argv = yargs(hideBin(process.argv))
-
-const serve = (port) => {
-  console.log(port)
-}
 
 argv.command('serve [port]', 'start the server', (yargs) => {
   return yargs.positional('port', {
@@ -17,31 +14,50 @@ argv.command('serve [port]', 'start the server', (yargs) => {
     default: 5000
   })
 }, (argv) => {
-  if (argv.verbose) console.info(`start server on : ${argv.port}`)
-  serve(argv.port)
+  serve(argv)
 })
   .command('open [url]', 'open the browser', (yargs) => {
-    return yargs.positional('url', {
-      describe: 'the web url',
-      default: 'https://bilibili.com'
-    })
+    return yargs
+      .positional('url', {
+        describe: 'the web url',
+        default: 'https://bilibili.com'
+      })
   }, (argv) => {
-    open(argv.url)
+    openj(argv.url)
   })
-  .command('whoami', 'set usr name', (yargs) => {
+  .command('whoami', 'say name', (yargs) => {
     return
   }, () => {
     sayname()
   })
-  .command('config [operate] [key] [value]', 'config info', (yargs) => {
-    return yargs.positional('operate', {
-      describe: 'the operate',
-      choices: ['get', 'set']
-    }).positional('key', {
-      describe: 'the key',
-    }).positional('value', {
-      describe: 'the value',
-    })
+  .command('config [key] [value]', 'config info', (yargs) => {
+    return yargs
+      .positional('key', {
+        describe: 'the key',
+      }).positional('value', {
+        describe: 'the value',
+      })
   }, (argv) => config(argv))
+  .option('list', {
+    alias: 'l',
+    describe: 'list all config',
+    type: 'boolean',
+  })
+  .command('lmk [scope] [key]', 'rmb me some thing', (yargs) => {
+    return yargs
+      .positional('key1', {
+        describe: 'first key',
+      }).positional('key2', {
+        describe: 'sec key',
+      })
+  }, (argv) => rmb(argv))
+  .option('replace', {
+    alias: 'r',
+    type: 'string',
+    describe: 'replace value',
+  })
+  .command('wis', 'what i say?', (yargs) => {
+    return
+  }, (argv) => wis(argv))
   .epilogue('CRf v1.0.0')
   .parse()
