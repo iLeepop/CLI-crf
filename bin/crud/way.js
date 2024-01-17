@@ -32,7 +32,7 @@ export const setin = async () => {
   let type = await inquirer.prompt([
     {
       name: 'scope',
-      message: 'Type your scope',
+      message: 'Type your scope: ',
       type: 'input',
     },
   ])
@@ -43,12 +43,12 @@ export const setin = async () => {
       let obj = await inquirer.prompt([
         {
           name: 'key',
-          message: 'Type your key',
+          message: 'Type your key: ',
           type: 'input',
         },
         {
           name: 'value',
-          message: 'Type your value',
+          message: 'Type your value: ',
           type: 'input',
         },
       ])
@@ -60,6 +60,7 @@ export const setin = async () => {
           [obj.key]: obj.value,
         }
         await writecrf(config[type.scope], tcontent)
+        console.log(chalk.bold.greenBright(`success edit ${obj.key} in scope ${type.scope}`))
       } else {
         console.log(chalk.bold.redBright('Check your Input and key cant allowed repeat'))
       }

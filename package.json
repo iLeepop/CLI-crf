@@ -1,6 +1,6 @@
 {
   "name": "cli-crf",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CRfilee CLI",
   "type": "module",
   "main": "index.js",
@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "clf": "./bin/index.js"
+    "clf": "bin/index.js"
   },
   "keywords": [
     "cli"
