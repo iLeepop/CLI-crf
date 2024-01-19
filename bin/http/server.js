@@ -1,7 +1,9 @@
 import express from 'express'
 import chalk from 'chalk'
 import bodyParser from 'body-parser'
+import http from 'node:http'
 import { rootStatic, rootIndex, staticHandler } from './static.js'
+import { createWebSocket } from './ws.js'
 
 const app = express()
 
@@ -24,7 +26,13 @@ export const serstart = (port) => {
     app.use(rootIndex)
   }
 
-  app.listen(port, () => {
+  const server = http.createServer(app)
+
+  server.addListener('upgrade', createWebSocket)
+
+  server.listen(port, () => {
     console.log(chalk.bold.green(`Server on http://localhost:${port}`))
   })
+
+  return server
 }

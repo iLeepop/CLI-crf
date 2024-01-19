@@ -1,7 +1,11 @@
 import WebSocket from "faye-websocket"
+import chalk from "chalk"
 
 export let clients = []
 export function createWebSocket(req, socket, head) {
+  if (clients.length > 0) {
+    console.log(chalk.rgb(100, 10, 50).bold('Ws already created'))
+  }
   const ws = new WebSocket(req, socket, head)
   ws.onopen = function () { ws.send('connected') }
     (function () {
@@ -12,7 +16,7 @@ export function createWebSocket(req, socket, head) {
         if (waitTimeout) clearTimeout(waitTimeout)
         waitTimeout = setTimeout(function () {
           wssend.apply(ws, args)
-        }, 1000)
+        }, 200)
       }
     }())
   ws.onclose = function () {

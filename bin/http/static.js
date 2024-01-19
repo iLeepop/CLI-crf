@@ -4,13 +4,10 @@ import fs from 'node:fs'
 import url from 'node:url'
 import send from 'send'
 import es from 'event-stream'
-import { fileURLToPath } from "node:url"
 import serveIndex from 'serve-index'
 import escapeHTML from '../util/escape.js'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const pwd = path.resolve(__dirname, process.cwd())
+import { __dirname, pwd } from './pwd.js'
 
 export const rootStatic = express.static(pwd)
 export const rootIndex = serveIndex(pwd, { 'icons': true })
@@ -31,7 +28,6 @@ function staticServer(pwd) {
     var injectTag = null
 
     function directory() {
-      console.log('directory')
       let pathname = url.parse(req.url).pathname
       res.statusCode = 301
       res.setHeader('Location', pathname + '/')
@@ -39,10 +35,9 @@ function staticServer(pwd) {
     }
 
     function file(filepath) {
-      console.log('file')
       let ex = path.extname(filepath).toLocaleLowerCase(), match,
         possibleExtensions = ['', '.html', '.htm', '.xhtml', '.php', '.svg']
-      if (hasNoOrigin && (possibleExtensions.indexOf(ex) > 1)) {
+      if (hasNoOrigin && (possibleExtensions.indexOf(ex) > -1)) {
         let content = fs.readFileSync(filepath, 'utf8')
         for (let i = 0; i < injectCandidates.length; ++i) {
           match = injectCandidates[i].exec(content)
@@ -58,15 +53,12 @@ function staticServer(pwd) {
     }
 
     function error(err) {
-      console.log('err')
       if (err.status === 404) return next();
       next(err);
     }
 
     function inject(stream) {
-      console.log('inject')
       if (injectTag) {
-        console.log('???')
         let len = INJECT_CODE.length + res.getHeader('Content-Length')
         res.setHeader('Content-Length', len)
         let originalPipe = stream.pipe
@@ -84,7 +76,5 @@ function staticServer(pwd) {
       .pipe(res)
   }
 }
-
-
 
 export const staticHandler = staticServer(pwd)
