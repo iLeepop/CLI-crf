@@ -6,5 +6,6 @@ import LiveServer from '../http/live.js'
 
 export const serve = (argv) => {
   LiveServer.server(argv.port)
+  LiveServer.watcher()
   openj(`http://localhost:${argv.port}`)
 } 

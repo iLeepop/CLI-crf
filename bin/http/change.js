@@ -19,19 +19,21 @@ export function handleChange(changePath) {
   })
 }
 
-export const watcher = chokidar.watch(pwd, {
-  ignored,
-  ignoreInitial: true,
-})
-.on('change', handleChange)
-.on('add', handleChange)
-.on('unlink', handleChange)
-.on('addDir', handleChange)
-.on('unlinkDir', handleChange)
-.on('ready', function () {
-  console.log(chalk.rgb(200, 40, 100).bold('Ready for watching'))
-})
-.on('error', function (err) {
-  console.log('Error', err)
-})
+export const watcher = () => {
+  chokidar.watch(pwd, {
+    ignored,
+    ignoreInitial: true,
+  })
+  .on('change', handleChange)
+  .on('add', handleChange)
+  .on('unlink', handleChange)
+  .on('addDir', handleChange)
+  .on('unlinkDir', handleChange)
+  .on('ready', function () {
+    console.log(chalk.rgb(200, 40, 100).bold('Ready for watching'))
+  })
+  .on('error', function (err) {
+    console.log('Error', err)
+  })
+}
 

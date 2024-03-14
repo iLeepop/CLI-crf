@@ -9,7 +9,7 @@ const app = express()
 
 app.use(bodyParser.json({ type: 'application/*+json' }))
 
-export const serstart = (port) => {
+export const serstart = (port, callback) => {
 
   if (false) {
     console.log(chalk.bold.yellow('Enable Static Access'))
